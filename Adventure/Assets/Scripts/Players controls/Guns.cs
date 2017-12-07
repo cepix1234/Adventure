@@ -5,6 +5,7 @@ using UnityEngine;
 public class Guns : MonoBehaviour {
 
     public GameObject muzzle;
+    public GameObject bullet;
     private float lastShot;
 
 	// Use this for initialization
@@ -21,11 +22,13 @@ public class Guns : MonoBehaviour {
     void shoot()
     {
         lastShot += Time.deltaTime;
-        if (Input.GetMouseButton(0) && lastShot >= 2)
+        if (Input.GetMouseButton(0) && lastShot >= 1)
         {
             lastShot = 0;
-            //shoot bullet or what ever
-            Debug.Log("SHOOT");
+            bullet.transform.position = muzzle.transform.position;
+            bullet.transform.rotation = muzzle.transform.rotation;
+            bullet.GetComponent<Bullet>().set(3f,10,10,true);
+            Instantiate(bullet);
         }
     }
 
@@ -34,6 +37,7 @@ public class Guns : MonoBehaviour {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float AngleRad = Mathf.Atan2(mousePos.y - transform.position.y, mousePos.x - transform.position.x);
         float AngleDeg = (180 / Mathf.PI) * AngleRad;
+        AngleDeg -= 90;
         transform.rotation = Quaternion.Euler(0, 0, AngleDeg);
     }
 
