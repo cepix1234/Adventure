@@ -12,9 +12,12 @@ public class PlayerMovement : MonoBehaviour {
 
 
     public Vector3 speed;
+
+    private PowerUpManager managePowerUp;
 	// Use this for initialization
 	void Start () {
         speed = new Vector2(0f, 0f);
+        managePowerUp = Camera.main.GetComponent<PowerUpManager>();
     }
 	
 	// Update is called once per frame
@@ -28,7 +31,7 @@ public class PlayerMovement : MonoBehaviour {
         //Forward
         if (Input.GetKey(KeyCode.D))
         {
-            speed += new Vector3(0.01f, 0, 0);
+            speed += new Vector3(0.1f, 0, 0);
             ForwardThruster.GetComponent<ParticleSystem>().Play();
         }
         if (Input.GetKeyUp(KeyCode.D))
@@ -40,7 +43,7 @@ public class PlayerMovement : MonoBehaviour {
         //UP
         if (Input.GetKey(KeyCode.W))
         {
-            speed += new Vector3(0, 0.01f, 0);
+            speed += new Vector3(0, 0.1f, 0);
             UpThruster.GetComponent<ParticleSystem>().Play();
         }
         if (Input.GetKeyUp(KeyCode.W))
@@ -51,7 +54,7 @@ public class PlayerMovement : MonoBehaviour {
         //Down
         if (Input.GetKey(KeyCode.A))
         {
-            speed += new Vector3(-0.01f, 0, 0);
+            speed += new Vector3(-0.1f, 0, 0);
             BackwerdsThruster.GetComponent<ParticleSystem>().Play();
         }
         if (Input.GetKeyUp(KeyCode.A))
@@ -63,7 +66,7 @@ public class PlayerMovement : MonoBehaviour {
         //Backwerds
         if (Input.GetKey(KeyCode.S))
         {
-            speed += new Vector3(0, -0.01f, 0);
+            speed += new Vector3(0, -0.1f, 0);
             DownThruster.GetComponent<ParticleSystem>().Play();
         }
         if(Input.GetKeyUp(KeyCode.S))
@@ -74,6 +77,20 @@ public class PlayerMovement : MonoBehaviour {
 
     void movePLayer ()
     {
+        speed = new Vector3(Mathf.Clamp(speed.x,-3,3), Mathf.Clamp(speed.y, -3, 3), 0);
         transform.position += speed * Time.deltaTime;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag.Equals("PowerUp"))
+        {
+            PowerUp powerup = other.GetComponent<PowerUp>();
+            if (powerup.type.Equals("Gun"))
+            {
+                managePowerUp.replaceWapons(powerup.gun);
+            }
+            Destroy(other.gameObject);
+        }
     }
 }

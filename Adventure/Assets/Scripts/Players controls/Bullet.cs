@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if(FiredByPlayer && !other.tag.Equals("Player"))
         {
@@ -55,6 +55,10 @@ public class Bullet : MonoBehaviour {
         else if(!FiredByPlayer && other.tag.Equals("Player"))
         {
             //Dodamage to player
+        }
+        else if(other.tag.Equals("Map"))
+        {
+            Destroy(this.gameObject);
         }
     }
 
