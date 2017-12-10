@@ -92,5 +92,9 @@ public class PlayerMovement : MonoBehaviour {
             }
             Destroy(other.gameObject);
         }
+        if(other.tag.Equals("Map") && !speed.Equals(new Vector3(0,0,0)))
+        {
+            speed = new Vector3(0,0,0);
+        }
     }
 }
