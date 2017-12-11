@@ -8,13 +8,4 @@ public class PowerUp : MonoBehaviour {
     public string type;
     public GameObject gun;
     public int helthUp;
-
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

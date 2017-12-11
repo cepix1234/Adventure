@@ -7,6 +7,8 @@ public class TakeDamage : MonoBehaviour {
     [SerializeField]
     private float insideFlame;
     public float health = 20;
+
+    public List<GameObject> powerUps;
 	// Use this for initialization
 	void Start () {
 		
@@ -14,7 +16,10 @@ public class TakeDamage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(health<=0)
+        {
+            destroyAndCheckPowerUp();
+        }
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,7 +40,20 @@ public class TakeDamage : MonoBehaviour {
         if(insideFlame >= 1)
         {
             insideFlame = 0;
-            health--;
+            health -= 5;
         }
+    }
+
+    void destroyAndCheckPowerUp()
+    {
+        int drop = Random.Range(0, 100);
+        if(drop > 50)
+        {
+            int powerUp = Random.Range(0, 3);
+            powerUps[powerUp].transform.position = transform.position;
+            Instantiate(powerUps[powerUp]);
+        }
+        Camera.main.GetComponent<EnemysKilled>().enemyKilled();
+        Destroy(this.gameObject);
     }
 }

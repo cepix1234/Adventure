@@ -17,11 +17,17 @@ public class EnemyAI : MonoBehaviour {
 
     [SerializeField]
     private List<Vector2> movePoints;
+    [SerializeField]
     int startPoint = 0;
+    [SerializeField]
+    private List<GameObject> spottingPoints;
+    public GameObject bullet;
 
-
+   private  Vector3 offset = new Vector3(0, 0, 0);
 
     private float randAngleTime;
+
+    private float lastShot;
 
     // Use this for initialization
     void Start () {
@@ -31,6 +37,13 @@ public class EnemyAI : MonoBehaviour {
         }
         movePoints = determinMovePoints();
         spawnMovePoints();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if(transform.GetChild(i).tag.Equals("SpotPoint"))
+            {
+                spottingPoints.Add(transform.GetChild(i).gameObject);
+            }
+        }
 	}
 	
 	// Update is called once per frame
@@ -39,6 +52,7 @@ public class EnemyAI : MonoBehaviour {
         if(see)
         {
             attackPlayer();
+            shoot();
         }else
         {
             PassiveMoving();
@@ -47,15 +61,18 @@ public class EnemyAI : MonoBehaviour {
 
     bool checkIfCanSeePlayer ()
     {
-        foreach(GameObject point in gunSpawns)
+        foreach (GameObject spotPoint in spottingPoints)
         {
-            Vector3 direction = point.transform.position - muzzle.transform.position;
-            RaycastHit2D[] hits = Physics2D.RaycastAll(muzzle.transform.position, direction, 20);
-            if (hits.Length > 1)
+            foreach (GameObject point in gunSpawns)
             {
-                if (hits[1].transform.tag.Equals("Player"))
+                Vector3 direction = point.transform.position - spotPoint.transform.position;
+                RaycastHit2D[] hits = Physics2D.RaycastAll(spotPoint.transform.position, direction, 20);
+                if (hits.Length > 1)
                 {
-                    return true;
+                    if (hits[1].transform.tag.Equals("Player"))
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -85,10 +102,15 @@ public class EnemyAI : MonoBehaviour {
 
     void spawnMovePoints()
     {
+        int i = 1;
         foreach(Vector2 point in movePoints)
         {
-            movePoint.transform.position = point;
+            GameObject Mpoint = movePoint; 
+            Mpoint.transform.position = point;
             Instantiate(movePoint);
+            string tag = "MovePoint" + i;
+            Mpoint.tag = tag;
+            i++;
         }
     }
 
@@ -104,26 +126,54 @@ public class EnemyAI : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag.Equals("MovePoint"))
+        if(collision.transform.tag.Equals("MovePoint1"))
         {
-            startPoint += 1;
-            startPoint = startPoint % 2;
+            startPoint = 0;
+        }else if (collision.transform.tag.Equals("MovePoint2"))
+        {
+            startPoint = 1;
         }
     }
 
     void attackPlayer ()
     {
-
         if (randAngleTime >= 4)
         {
             randAngleTime = 0;
-
+            Vector3 twoardsEnemy = transform.position - player.transform.position;
+            twoardsEnemy = twoardsEnemy / Vector3.Distance(transform.position, player.transform.position);
+            int LorR = Random.Range(0, 3);
+            if(LorR == 0)
+            {
+                offset = Quaternion.Euler(0, 0, 90) * twoardsEnemy;
+            }
+            else if(LorR == 1)
+            {
+                offset = -(Quaternion.Euler(0, 0, 90) * twoardsEnemy);
+            }else
+            {
+                offset = new Vector3(0, 0, 0);
+            }
         }
         randAngleTime += Time.deltaTime;
-        float AngleRad = Mathf.Atan2(player.transform.position.y - transform.position.y, player.transform.position.x - transform.position.x);
+        Vector3 targetPos = player.transform.position + offset*5;
+        float AngleRad = Mathf.Atan2(targetPos.y - transform.position.y, targetPos.x - transform.position.x);
         float AngleDeg = (180 / Mathf.PI) * AngleRad;
         AngleDeg -= 90;
         transform.rotation = Quaternion.Euler(0, 0, AngleDeg);
         transform.position += transform.up * Time.deltaTime;
+    }
+
+    void shoot()
+    {
+        lastShot += Time.deltaTime;
+        if(lastShot >= 4)
+        {
+            bullet.transform.position = muzzle.transform.position;
+            bullet.transform.rotation = muzzle.transform.rotation;
+            bullet.GetComponent<Bullet>().set(5f, 10, 10, false);
+            Instantiate(bullet);
+            lastShot = 0;
+        }
     }
 }

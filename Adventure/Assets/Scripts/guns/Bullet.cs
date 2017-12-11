@@ -48,15 +48,23 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        bool destroy = false;
         if(FiredByPlayer && other.tag.Equals("Enemy"))
         {
             other.transform.GetComponent<TakeDamage>().health -= damage;
+            destroy = true;
         }
         else if(!FiredByPlayer && other.tag.Equals("Player"))
         {
-            //Dodamage to player
+            other.transform.GetComponent<PlayerHealth>().takeDamage(damage);
+            destroy = true;
         }
         else if(other.tag.Equals("Map"))
+        {
+            destroy = true;
+        }
+
+        if(destroy)
         {
             Destroy(this.gameObject);
         }

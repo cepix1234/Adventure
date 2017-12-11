@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour {
     public GameObject DownThruster;
 
 
-
     public Vector3 speed;
 
     private PowerUpManager managePowerUp;
@@ -77,7 +76,7 @@ public class PlayerMovement : MonoBehaviour {
 
     void movePLayer ()
     {
-        speed = new Vector3(Mathf.Clamp(speed.x,-3,3), Mathf.Clamp(speed.y, -3, 3), 0);
+        speed = new Vector3(Mathf.Clamp(speed.x,-5,5), Mathf.Clamp(speed.y, -5, 5), 0);
         transform.position += speed * Time.deltaTime;
     }
 
@@ -89,6 +88,9 @@ public class PlayerMovement : MonoBehaviour {
             if (powerup.type.Equals("Gun"))
             {
                 managePowerUp.replaceWapons(powerup.gun);
+            }else if(powerup.type.Equals("Helth"))
+            {
+                transform.GetComponent<PlayerHealth>().getHealth(powerup.helthUp);
             }
             Destroy(other.gameObject);
         }
