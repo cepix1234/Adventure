@@ -79,20 +79,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\EndScreen\EndScreen.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyAI.cs" />
-    <Compile Include="Assets\Scripts\Enemy\TakeDamage.cs" />
-    <Compile Include="Assets\Scripts\Managers\EnemysKilled.cs" />
-    <Compile Include="Assets\Scripts\Managers\OpenEndScreen.cs" />
-    <Compile Include="Assets\Scripts\Managers\PowerUpManager.cs" />
-    <Compile Include="Assets\Scripts\Players controls\PlayerHealth.cs" />
-    <Compile Include="Assets\Scripts\Players controls\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\PowerUp\PowerUp.cs" />
+    <Compile Include="Assets\Scripts\Level\Enemy\EnemyAI.cs" />
+    <Compile Include="Assets\Scripts\Level\Enemy\TakeDamage.cs" />
+    <Compile Include="Assets\Scripts\Level\Managers\EnemysKilled.cs" />
+    <Compile Include="Assets\Scripts\Level\Managers\HowLevelEnded.cs" />
+    <Compile Include="Assets\Scripts\Level\Managers\OpenEndScreen.cs" />
+    <Compile Include="Assets\Scripts\Level\Managers\PowerUpManager.cs" />
+    <Compile Include="Assets\Scripts\Level\Players controls\PlayerHealth.cs" />
+    <Compile Include="Assets\Scripts\Level\Players controls\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Level\PowerUp\PowerUp.cs" />
+    <Compile Include="Assets\Scripts\Level\UI\EnemyHelth.cs" />
+    <Compile Include="Assets\Scripts\Level\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\Level\guns\Bullet.cs" />
+    <Compile Include="Assets\Scripts\Level\guns\Guns.cs" />
+    <Compile Include="Assets\Scripts\Level\guns\IgnoreCollision.cs" />
     <Compile Include="Assets\Scripts\StartScreen\startScreen.cs" />
-    <Compile Include="Assets\Scripts\UI\EnemyHelth.cs" />
-    <Compile Include="Assets\Scripts\UI\UIManager.cs" />
-    <Compile Include="Assets\Scripts\guns\Bullet.cs" />
-    <Compile Include="Assets\Scripts\guns\Guns.cs" />
-    <Compile Include="Assets\Scripts\guns\IgnoreCollision.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
